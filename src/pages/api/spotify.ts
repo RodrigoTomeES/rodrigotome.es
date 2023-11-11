@@ -1,11 +1,44 @@
+import { spotifyService } from '@/services';
+import { SpotifyErrorNoPlaying } from '@/services/spotifyService';
+
+import type { SpotifyResponse } from '@/services/types';
+
 export const prerender = false;
 
 export async function GET() {
-  const number = Math.random();
-  return {
-    body: JSON.stringify({
-      number,
-      message: `Here's a random number: ${number}`,
-    }),
-  };
+  try {
+    const transform = (data: SpotifyResponse) => ({
+      artist: data.item.artists[0].name,
+      song: data.item.name,
+      album: data.item.album.name,
+      cover: data.item.album.images[0].url,
+      isPlaying: data.is_playing,
+    });
+
+    return new Response(
+      JSON.stringify(transform(await spotifyService.getCurrentlyPlayingSong())),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+  } catch (error) {
+    if (error instanceof SpotifyErrorNoPlaying) {
+      return new Response(JSON.stringify({}), {
+        status: 204,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+
+    return new Response(JSON.stringify({}), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
 }

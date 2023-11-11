@@ -1,5 +1,6 @@
 {
   "extends": "astro/tsconfigs/strict",
+  "verbatimModuleSyntax": true,
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
@@ -7,6 +8,8 @@
       "@/public": ["public/"],
       "@/assets/*": ["src/assets/*"],
       "@/assets": ["src/assets/"],
+      "@/services/*": ["src/lib/services/*"],
+      "@/services": ["src/lib/services/"],
       "@/utils/*": ["src/lib/utils/*"],
       "@/utils": ["src/lib/utils"],
       "@lib/*": ["src/lib/*"],
@@ -23,6 +26,9 @@
       "@/molecules": ["src/components/molecules/"],
       "@/organisms/*": ["src/components/organisms/*"],
       "@/organisms": ["src/components/organisms/"]
-    }
-  }
+    },
+    "plugins": [{ "name": "@astrojs/ts-plugin" }]
+  },
+  "include": ["src/**/*", "scripts/**/*"],
+  "exclude": ["node_modules", "build", "dist"]
 }
