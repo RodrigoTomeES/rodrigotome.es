@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Welcome to Astro." description="Hellow world">
+  <main
+    class="grid min-h-[100dvh] grid-cols-2 gap-4 p-4"
+    style="grid-template-areas: var(--layout);"
+  >
+    <div class="bg-red-500" style="grid-area: me;">1</div>
+    <div style="grid-area: social-media;" class="grid grid-cols-2 bg-green-500">
+      <div class="bg-green-600">1</div>
+      <div class="bg-red-600">2</div>
+      <div class="bg-orange-600">3</div>
+      <div class="bg-purple-600">4</div>
+    </div>
+    <div style="grid-area: quote;" class="bg-blue-500">3</div>
+    <div style="grid-area: github;" class="bg-purple-500">4</div>
+    <div style="grid-area: flicker;" class="bg-yellow-500">5</div>
+    <div style="grid-area: spotify;" class="bg-orange-500">6</div>
+  </main>
+</Layout>
+
+<style>
+  :root {
+    --layout: var(--layout-normal);
+    --layout-normal: 'me social-media' 'quote quote' 'github flicker'
+      'spotify flicker';
+    --layout-random-1: 'quote quote' 'me social-media' 'flicker github'
+      'flicker spotify';
+    --layout-random-2: 'spotify me' 'quote quote' 'flicker github'
+      'flicker social-media';
+    --layout-random-3: 'quote me' 'quote social-media' 'spotify github'
+      'flicker flicker';
+    --layout-random-4: 'quote flicker' 'quote flicker' 'spotify me'
+      'github social-media';
+  }
+</style>
+
+<script>
+  const layouts = {
+    0: '--layout-normal',
+    1: '--layout-random-1',
+    2: '--layout-random-2',
+    3: '--layout-random-3',
+    4: '--layout-random-4',
+  };
+  const random = (min: number, max: number) =>
+    Math.floor(Math.random() * (max - min + 1) + min);
+
+  window.addEventListener('load', async () => {
+    const { Shake } = await import('@/utils/shake');
+    const shake = new Shake({ threshold: 15, timeout: 100 });
+
+    shake.addEventListener('shake', (ev) => {
+      document.documentElement.style.setProperty(
+        '--layout',
+        `var(${
+          layouts[
+            random(0, Object.keys(layouts).length) as keyof typeof layouts
+          ]
+        })`,
+      );
+    });
+
+    shake.start();
+  });
+</script>

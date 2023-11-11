@@ -1,0 +1,28 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/public/*": ["public/*"],
+      "@/public": ["public/"],
+      "@/assets/*": ["src/assets/*"],
+      "@/assets": ["src/assets/"],
+      "@/utils/*": ["src/lib/utils/*"],
+      "@/utils": ["src/lib/utils"],
+      "@lib/*": ["src/lib/*"],
+      "@lib": ["src/lib/"],
+      "@/styles/*": ["src/styles/*"],
+      "@/styles": ["src/styles/"],
+      "@/types/*": ["src/types/*"],
+      "@/types": ["src/types"],
+      "@/layouts/*": ["src/layouts/*"],
+      "@/layouts": ["src/layouts/"],
+      "@/atoms/*": ["src/components/atoms/*"],
+      "@/atoms": ["src/components/atoms/"],
+      "@/molecules/*": ["src/components/molecules/*"],
+      "@/molecules": ["src/components/molecules/"],
+      "@/organisms/*": ["src/components/organisms/*"],
+      "@/organisms": ["src/components/organisms/"]
+    }
+  }
+}
