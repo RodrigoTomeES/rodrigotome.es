@@ -1,6 +1,6 @@
 function createEvent<Type extends string, Detail>(
   type: Type,
-  detail: Detail
+  detail: Detail,
 ): CustomEvent<Detail> & { type: Type } {
   return new CustomEvent(type, { detail }) as CustomEvent<Detail> & {
     type: Type;
@@ -10,7 +10,7 @@ function createEvent<Type extends string, Detail>(
 function getMaxAcceleration(event: DeviceMotionEvent): number {
   let max = 0;
   if (event.acceleration) {
-    for (const key of ["x", "y", "z"] as const) {
+    for (const key of ['x', 'y', 'z'] as const) {
       const value = Math.abs(event.acceleration[key] ?? 0);
       if (value > max) max = value;
     }
@@ -19,7 +19,7 @@ function getMaxAcceleration(event: DeviceMotionEvent): number {
 }
 
 export type ShakeEventData = DeviceMotionEvent;
-export type ShakeEvent = CustomEvent<ShakeEventData> & { type: "shake" };
+export type ShakeEvent = CustomEvent<ShakeEventData> & { type: 'shake' };
 export type ShakeEventListener = (event: ShakeEvent) => void;
 
 export type ShakeOptions = {
@@ -39,8 +39,8 @@ export type ShakeOptions = {
 
 export class Shake extends EventTarget {
   #approved?: boolean;
-  #threshold: ShakeOptions["threshold"];
-  #timeout: ShakeOptions["timeout"];
+  #threshold: ShakeOptions['threshold'];
+  #timeout: ShakeOptions['timeout'];
   #timeStamp: number;
 
   constructor(options?: Partial<ShakeOptions>) {
@@ -51,13 +51,14 @@ export class Shake extends EventTarget {
     this.#timeStamp = timeout * -1;
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   addEventListener(
-    type: "shake",
+    type: 'shake',
     listener: ShakeEventListener | null,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void {
-    type Arg1 = Parameters<EventTarget["addEventListener"]>[1];
+    type Arg1 = Parameters<EventTarget['addEventListener']>[1];
     super.addEventListener(type, listener as Arg1, options);
   }
 
@@ -65,31 +66,32 @@ export class Shake extends EventTarget {
     return super.dispatchEvent(event);
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   removeEventListener(
-    type: "shake",
+    type: 'shake',
     callback: ShakeEventListener | null,
-    options?: EventListenerOptions | boolean
+    options?: EventListenerOptions | boolean,
   ): void {
-    type Arg1 = Parameters<EventTarget["removeEventListener"]>[1];
+    type Arg1 = Parameters<EventTarget['removeEventListener']>[1];
     super.removeEventListener(type, callback as Arg1, options);
   }
 
   async approve(): Promise<boolean> {
-    if (typeof this.#approved === "undefined") {
-      if (!("DeviceMotionEvent" in window)) return (this.#approved = false);
+    if (typeof this.#approved === 'undefined') {
+      if (!('DeviceMotionEvent' in window)) return (this.#approved = false);
       try {
         type PermissionRequestFn = () => Promise<PermissionState>;
         type DME = typeof DeviceMotionEvent & {
           requestPermission: PermissionRequestFn;
         };
         if (
-          typeof (DeviceMotionEvent as DME).requestPermission === "function"
+          typeof (DeviceMotionEvent as DME).requestPermission === 'function'
         ) {
           const permissionState = await (
             DeviceMotionEvent as DME
           ).requestPermission();
-          this.#approved = permissionState === "granted";
+          this.#approved = permissionState === 'granted';
         } else this.#approved = true;
       } catch {
         this.#approved = false;
@@ -104,17 +106,17 @@ export class Shake extends EventTarget {
     const accel = getMaxAcceleration(event);
     if (accel < this.#threshold) return;
     this.#timeStamp = event.timeStamp;
-    this.dispatchEvent(createEvent("shake", event));
+    this.dispatchEvent(createEvent('shake', event));
   };
 
   async start(): Promise<boolean> {
     const approved = await this.approve();
     if (!approved) return false;
-    window.addEventListener("devicemotion", this.#handleDeviceMotion);
+    window.addEventListener('devicemotion', this.#handleDeviceMotion);
     return true;
   }
 
   stop(): void {
-    window.removeEventListener("devicemotion", this.#handleDeviceMotion);
+    window.removeEventListener('devicemotion', this.#handleDeviceMotion);
   }
 }

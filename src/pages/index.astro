@@ -7,7 +7,7 @@ import Layout from '../layouts/Layout.astro';
     class="grid min-h-[100dvh] grid-cols-2 gap-4 p-4"
     style="grid-template-areas: var(--layout);"
   >
-    <div class="bg-red-500" style="grid-area: me;">1</div>
+    <div style="grid-area: me;" class="bg-red-500">1</div>
     <div style="grid-area: social-media;" class="grid grid-cols-2 bg-green-500">
       <div class="bg-green-600">1</div>
       <div class="bg-red-600">2</div>
@@ -52,7 +52,7 @@ import Layout from '../layouts/Layout.astro';
     const { Shake } = await import('@/utils/shake');
     const shake = new Shake({ threshold: 15, timeout: 100 });
 
-    shake.addEventListener('shake', (ev) => {
+    shake.addEventListener('shake', () => {
       document.documentElement.style.setProperty(
         '--layout',
         `var(${
