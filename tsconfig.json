@@ -1,7 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "verbatimModuleSyntax": true,
   "compilerOptions": {
+    "verbatimModuleSyntax": true,
     "baseUrl": ".",
     "paths": {
       "@/public/*": ["public/*"],

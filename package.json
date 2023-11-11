@@ -21,6 +21,7 @@
     "get-refresh-token": "ts-node-esm ./scripts/get-refresh-token.ts"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.3.1",
     "@astrojs/cloudflare": "7.6.4",
     "@astrojs/sitemap": "3.0.3",
     "@astrojs/tailwind": "5.0.2",
