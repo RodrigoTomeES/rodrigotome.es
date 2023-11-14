@@ -27,16 +27,6 @@ const { class: className = '', as: Element = 'dev', ...props } = Astro.props;
           <stop offset="0%" stop-color="#ffffff"></stop>
           <stop offset="100%" stop-color="#ffffff00"></stop>
         </linearGradient>
-        <linearGradient
-          id="gradient-half"
-          x1="-50%"
-          y1="-50%"
-          x2="100%"
-          y2="100%"
-        >
-          <stop offset="0%" stop-color="#ffffff"></stop>
-          <stop offset="100%" stop-color="#ffffff00"></stop>
-        </linearGradient>
       </defs>
     </svg>
   </div>
@@ -121,14 +111,13 @@ const { class: className = '', as: Element = 'dev', ...props } = Astro.props;
 <script>
   window.addEventListener('load', async () => {
     try {
-      const response = await fetch(`.${import.meta.env.BASE_URL}/api/spotify`);
+      const response = await fetch(`${import.meta.env.BASE_URL}api/spotify`);
       const data = await response.json();
 
       if (data.isPlaying) {
         const spotify = document.getElementById('spotify');
-
-        // insert an image with the cover
         const img = document.createElement('img');
+
         img.src = data.cover;
         img.alt = data.album;
         img.style.gridArea = 'stack';
