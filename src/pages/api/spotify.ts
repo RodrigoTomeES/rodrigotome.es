@@ -26,15 +26,15 @@ export async function GET() {
     );
   } catch (error) {
     if (error instanceof SpotifyErrorNoPlaying) {
-      return new Response(JSON.stringify({}), {
-        status: 204,
+      return new Response(JSON.stringify({ isPlaying: false }), {
+        status: 200,
         headers: {
           'Content-Type': 'application/json',
         },
       });
     }
 
-    return new Response(JSON.stringify({}), {
+    return new Response(JSON.stringify(error), {
       status: 500,
       headers: {
         'Content-Type': 'application/json',

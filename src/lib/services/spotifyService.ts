@@ -123,13 +123,10 @@ export class SpotifyService implements ISpotifyService {
       response = await this.fetchCurrentlyPlayingSong();
     }
 
-    const data = await response.json();
-    const isSongPlaying = !!data.item;
-
-    if (!isSongPlaying) {
+    if (response.status === 204) {
       throw new SpotifyErrorNoPlaying('No song playing');
     }
 
-    return data;
+    return await response.json();
   }
 }
