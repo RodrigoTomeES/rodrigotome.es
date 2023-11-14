@@ -4,7 +4,7 @@ import type { HTMLTag, Polymorphic } from 'astro/types';
 
 export type Props<T extends HTMLTag> = Polymorphic<TypeAs<T>> & TypeClass;
 
-const { class: className = '', as: Element = 'dev', ...props } = Astro.props;
+const { class: className = '', as: Element = 'div', ...props } = Astro.props;
 ---
 
 <Element class={`block-container ${className}`} {...props} id="spotify">
