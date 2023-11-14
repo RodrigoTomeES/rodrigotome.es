@@ -1,0 +1,36 @@
+---
+import type { GitHubAPIResponse, TypeAs, TypeClass } from '@/types';
+import type { HTMLTag, Polymorphic } from 'astro/types';
+
+export type Props<T extends HTMLTag> = Polymorphic<TypeAs<T>> & TypeClass;
+
+const GITHUB_ENDPOINT = `https://api.github.com/search/repositories?q=org:${
+  import.meta.env.GITHUB_USERNAME
+}&sort=stars&order=desc`;
+
+const fetchReposWithMoreStars = async () => {
+  const response = await fetch(GITHUB_ENDPOINT);
+  const data: GitHubAPIResponse = await response.json();
+
+  return data.items;
+};
+
+const repos = (await fetchReposWithMoreStars()).slice(0, 5);
+
+const { as: Element = 'div', ...props } = Astro.props;
+---
+
+<Element {...props} id="github">
+  <ul>
+    {
+      repos.map((repo) => (
+        <li>
+          <a href={repo.html_url}>
+            {repo.name}: {repo.stargazers_count}, topics:{' '}
+            {repo.topics.join(', ')}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Element>
