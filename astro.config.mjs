@@ -12,5 +12,7 @@ export default defineConfig({
     }),
     sitemap(),
   ],
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    imageService: 'passthrough',
+  }),
 });
