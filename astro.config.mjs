@@ -16,6 +16,6 @@ export default defineConfig({
     imageService: 'passthrough',
   }),
   image: {
-    domains: ['flickr.com'],
+    domains: ['live.staticflickr.com'],
   },
 });
