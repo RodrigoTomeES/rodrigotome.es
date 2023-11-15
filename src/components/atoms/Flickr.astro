@@ -1,5 +1,5 @@
 ---
-import { Picture } from 'astro:assets';
+import { Image } from 'astro:assets';
 
 import flickrService from '@/services/flickr';
 
@@ -23,8 +23,7 @@ const { class: className, as: Element = 'div', ...props } = Astro.props;
     {
       photos.map((photo) => (
         <figure class="relative inline-block h-full w-full">
-          <Picture
-            formats={['webp']}
+          <Image
             src={photo.url}
             alt={photo.title}
             height={photo.height}
