@@ -13,7 +13,7 @@ export default defineConfig({
     sitemap(),
   ],
   adapter: cloudflare({
-    imageService: 'passthrough',
+    imageService: 'compile',
   }),
   image: {
     domains: ['live.staticflickr.com'],
