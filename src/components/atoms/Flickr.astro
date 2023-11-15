@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets';
+
+import flickrService from '@/services/flickr';
+
+import type { TypeAs, TypeClass } from '@/types';
+import type { HTMLTag, Polymorphic } from 'astro/types';
+
+export type Props<T extends HTMLTag> = Polymorphic<TypeAs<T>> & TypeClass;
+
+const photos = await flickrService.getAlbum(
+  import.meta.env.FLICKR_PHOTOSET_ID,
+  import.meta.env.FLICKR_USER_ID,
+);
+
+const { class: className, as: Element = 'div', ...props } = Astro.props;
+---
+
+<Element class:list={['relative w-full', className]} {...props} id="flickr">
+  <div
+    class="h-full w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden scroll-smooth whitespace-nowrap"
+  >
+    {
+      photos.map((photo) => (
+        <figure class="relative inline-block h-full w-full">
+          <Image
+            src={photo.url}
+            alt={photo.title}
+            height={photo.height}
+            width={photo.width}
+            draggable={false}
+            class="w-full object-cover object-center"
+          />
+          <figcaption class="flex flex-wrap gap-2 p-2">
+            <span class="line-clamp-1">Title: {photo.title}</span>
+            <span class="line-clamp-1">
+              Tags: {photo.tags.slice(0, 3).join(', ')}
+            </span>
+            <span class="line-clamp-1">Date: {photo.date}</span>
+            <span class="line-clamp-1">Camera: {photo.camera}</span>
+            {photo.exif.map((exif) => (
+              <span class="line-clamp-1">
+                {exif.label}: {exif.raw}
+              </span>
+            ))}
+          </figcaption>
+        </figure>
+      ))
+    }
+  </div>
+</Element>

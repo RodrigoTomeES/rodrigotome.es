@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 
+import Flickr from '@/atoms/Flickr.astro';
 import GitHub from '@/atoms/GitHub.astro';
 import Spotify from '@/atoms/Spotify.astro';
 
@@ -40,7 +41,7 @@ import Layout from '../layouts/Layout.astro';
     </div>
     <div style="grid-area: quote;" class="bg-blue-500">3</div>
     <GitHub style="grid-area: github;" class="bg-purple-500" />
-    <div style="grid-area: flicker;" class="bg-yellow-500">5</div>
+    <div style="grid-area: flicker;" class="bg-yellow-500"><Flickr /></div>
     <Spotify style="grid-area: spotify;" />
   </main>
 </Layout>

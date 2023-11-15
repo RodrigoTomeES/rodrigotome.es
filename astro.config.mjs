@@ -15,4 +15,7 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: 'passthrough',
   }),
+  image: {
+    domains: ['flickr.com'],
+  },
 });
