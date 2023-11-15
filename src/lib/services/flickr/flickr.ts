@@ -44,7 +44,7 @@ export class FlickrService implements IFlickrService {
 
       return data;
     } catch (error) {
-      throw new Error(JSON.stringify(error));
+      throw new FlickrErrorGetPhotos('Error fetching Flickr getPhotos', 0);
     }
   }
 
@@ -76,7 +76,7 @@ export class FlickrService implements IFlickrService {
 
       return data;
     } catch (error) {
-      throw new Error(JSON.stringify(error));
+      throw new FlickrErrorGetExif('Error fetching Flickr getExif', 0);
     }
   }
 
@@ -84,56 +84,52 @@ export class FlickrService implements IFlickrService {
     photosetId: string,
     userId: string,
   ): Promise<GetAlbumResponse> {
-    try {
-      const photos = await this.getPhotos(photosetId, userId);
+    const photos = await this.getPhotos(photosetId, userId);
 
-      return await Promise.all(
-        photos.photoset.photo.map(async (photo) => {
-          const exif = await this.getExif(photo.id, photo.secret);
-          const {
-            datetaken,
-            geo_is_public,
-            height_o,
-            latitude,
-            longitude,
-            originalformat,
-            title,
-            url_o,
-            width_o,
-          } = photo;
+    return await Promise.all(
+      photos.photoset.photo.map(async (photo) => {
+        const exif = await this.getExif(photo.id, photo.secret);
+        const {
+          datetaken,
+          geo_is_public,
+          height_o,
+          latitude,
+          longitude,
+          originalformat,
+          title,
+          url_o,
+          width_o,
+        } = photo;
 
-          return {
-            title,
-            tags: photo.tags.split(' '),
-            date: datetaken,
-            url: url_o,
-            height: height_o,
-            width: width_o,
-            format: originalformat,
-            ...(geo_is_public === 1 ? { latitude, longitude } : {}),
-            camera: exif.photo.camera,
-            exif: exif.photo.exif
-              .filter(
-                (item) =>
-                  item.tag === 'FocalLength' ||
-                  item.tag === 'FNumber' ||
-                  item.tag === 'ISO' ||
-                  item.tag === 'ExposureProgram' ||
-                  item.tag === 'WhiteBalance' ||
-                  item.tag === 'GPSAltitude' ||
-                  item.tag === 'FocalLengthIn35mmFormat' ||
-                  item.tag === 'ExposureTime',
-              )
-              .map((item) => ({
-                ...item,
-                raw: item.raw._content,
-                ...(item.clean ? { clean: item.clean._content } : {}),
-              })) as GetAlbumPhoto['exif'],
-          };
-        }),
-      );
-    } catch (error) {
-      throw new Error(JSON.stringify(error));
-    }
+        return {
+          title,
+          tags: photo.tags.split(' '),
+          date: datetaken,
+          url: url_o,
+          height: height_o,
+          width: width_o,
+          format: originalformat,
+          ...(geo_is_public === 1 ? { latitude, longitude } : {}),
+          camera: exif.photo.camera,
+          exif: exif.photo.exif
+            .filter(
+              (item) =>
+                item.tag === 'FocalLength' ||
+                item.tag === 'FNumber' ||
+                item.tag === 'ISO' ||
+                item.tag === 'ExposureProgram' ||
+                item.tag === 'WhiteBalance' ||
+                item.tag === 'GPSAltitude' ||
+                item.tag === 'FocalLengthIn35mmFormat' ||
+                item.tag === 'ExposureTime',
+            )
+            .map((item) => ({
+              ...item,
+              raw: item.raw._content,
+              ...(item.clean ? { clean: item.clean._content } : {}),
+            })) as GetAlbumPhoto['exif'],
+        };
+      }),
+    );
   }
 }
