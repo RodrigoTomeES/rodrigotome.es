@@ -1,7 +1,6 @@
-import { spotifyService } from '@/services';
-import { SpotifyErrorNoPlaying } from '@/services/spotifyService';
+import { SpotifyErrorNoPlaying, spotifyService } from '@/services';
 
-import type { SpotifyResponse } from '@/services/types';
+import type { SpotifyResponse } from '@/services';
 
 export const prerender = false;
 

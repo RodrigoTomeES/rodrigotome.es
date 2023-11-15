@@ -1,5 +1,3 @@
-import { SpotifyService } from './spotifyService';
+export { default as spotifyService, SpotifyErrorNoPlaying } from './spotify';
 
-const spotifyService = new SpotifyService();
-
-export { spotifyService };
+export type { SpotifyResponse } from './spotify';
