@@ -7,6 +7,14 @@ import Spotify from '@/atoms/Spotify.astro';
 
 import me from '@/assets/images/me.jpg';
 import Layout from '../layouts/Layout.astro';
+
+import type { OGImageOptions } from 'node_modules/astro-og-canvas/dist/types';
+
+export const og: OGImageOptions = {
+  title: 'Rodrigo Tomé',
+  description: 'Rodrigo Tomé personal website.',
+  logo: { path: './src/assets/images/me.jpg', size: [350] },
+};
 ---
 
 <Layout title="Welcome to Astro." description="Hellow world">
