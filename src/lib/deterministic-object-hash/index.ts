@@ -1,21 +1,21 @@
-import { webcrypto as crypto } from 'node:crypto';
-
 import { encoders } from './encoders';
 import isPlainObject from './isPlainObject';
 
 import type { BinaryToTextEncoding } from 'crypto';
 
+const commonCrypto = crypto || (await import('node:crypto')).webcrypto;
+
 /** Creates a deterministic hash for all inputs. */
 export default async function deterministicHash(
   input: unknown,
-  algorithm: Parameters<typeof crypto.subtle.digest>[0] = 'SHA-1',
+  algorithm: Parameters<typeof commonCrypto.subtle.digest>[0] = 'SHA-1',
   output: BinaryToTextEncoding = 'hex',
 ) {
   const encoder = new TextEncoder();
   const data = encoder.encode(deterministicString(input));
-  const hash = await crypto.subtle.digest(algorithm, data);
+  const hash = await commonCrypto.subtle.digest(algorithm, data);
 
-  return encoders[output](hash);
+  return await encoders[output](hash);
 }
 
 export function deterministicString(input: unknown): string {
