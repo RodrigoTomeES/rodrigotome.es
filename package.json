@@ -31,6 +31,8 @@
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",
     "@jasikpark/astro-svg-loader": "0.2.0",
     "@nextui-org/react": "^2.2.9",
+    "@types/base-64": "^1.0.2",
+    "@types/node": "^20.9.1",
     "@typescript-eslint/eslint-plugin": "6.11.0",
     "@typescript-eslint/parser": "6.11.0",
     "astro": "3.5.4",
@@ -65,6 +67,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "astro-og-canvas": "^0.3.1"
+    "astro-og-canvas": "^0.3.1",
+    "base-64": "^1.0.0"
   }
 }
