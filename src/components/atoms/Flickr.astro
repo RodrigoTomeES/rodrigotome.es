@@ -30,7 +30,7 @@ const { class: className, as: Element = 'div', ...props } = Astro.props;
             width={photo.width}
             draggable={false}
             class="w-full object-cover object-center"
-            densities={[1.5, 2]}
+            widths={[240, 540, 720]}
           />
           <figcaption class="flex flex-wrap gap-2 p-2">
             <span class="line-clamp-1">Title: {photo.title}</span>
