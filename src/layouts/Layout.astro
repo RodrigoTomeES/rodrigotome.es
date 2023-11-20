@@ -19,8 +19,9 @@ const { title, description } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
   </head>
-  <body class="bg-slate-500 min-h-[100dvh]">
+  <body class="min-h-[100dvh] bg-slate-500">
     <slot />
   </body>
 </html>
