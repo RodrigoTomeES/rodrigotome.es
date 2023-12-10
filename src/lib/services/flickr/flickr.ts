@@ -29,7 +29,7 @@ export class FlickrService implements IFlickrService {
   ): Promise<GetPhotosResponseOK> {
     try {
       const response = await fetch(
-        `https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${this.apiKey}&photoset_id=${photosetId}&user_id=${userId}&extras=date_taken%2C+geo%2C+url_o%2C+original_format%2C+tags&per_page=5&privacy_filter=1&media=photo&format=json&nojsoncallback=1`,
+        `https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${this.apiKey}&photoset_id=${photosetId}&user_id=${userId}&extras=date_taken%2C+geo%2C+url_o%2C+original_format%2C+tags&per_page=6&privacy_filter=1&media=photo&format=json&nojsoncallback=1`,
       );
 
       if (!response.ok)
