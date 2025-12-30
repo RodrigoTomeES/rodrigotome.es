@@ -52,9 +52,12 @@ export type GetPhotosPhoto = {
   geo_is_contact: number;
   geo_is_friend: number;
   geo_is_family: number;
-  url_o: string;
-  height_o: number;
-  width_o: number;
+  url_o?: string;
+  url_l: string;
+  height_o?: number;
+  height_l: number;
+  width_o?: number;
+  width_l: number;
 };
 
 // GetExifResponse

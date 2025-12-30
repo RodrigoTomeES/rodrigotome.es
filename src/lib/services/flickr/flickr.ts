@@ -18,6 +18,10 @@ export class FlickrService implements IFlickrService {
 
   /**
    * Get the list of photos in a set.
+   * IMPORTANT: Due API changes in Flickr since April 15, 2025, original sizes is no longer available for free accounts.
+   * In case you use a free account this API will return the largest size available for free account that is 1024px. The url_o, width_o and height_o field will be omitted in this case. You should use url_l, width_l and height_l instead.
+   * https://blog.flickr.net/en/2025/04/15/service-update-original-large-size-download-limitations-on-free-accounts/
+   *
    * @see https://www.flickr.com/services/api/flickr.photosets.getPhotos.html
    * @param photosetId The id of the photoset to return the photos for.
    * @param userId The user_id here is the owner of the set passed in photoset_id.
@@ -29,7 +33,7 @@ export class FlickrService implements IFlickrService {
   ): Promise<GetPhotosResponseOK> {
     try {
       const response = await fetch(
-        `https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${this.apiKey}&photoset_id=${photosetId}&user_id=${userId}&extras=date_taken%2C+geo%2C+url_o%2C+original_format%2C+tags&per_page=6&privacy_filter=1&media=photo&format=json&nojsoncallback=1`,
+        `https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${this.apiKey}&photoset_id=${photosetId}&user_id=${userId}&extras=date_taken%2C+geo%2C+o_dims%2C+url_o%2C+url_l%2C+original_format%2C+tags&per_page=6&privacy_filter=1&media=photo&format=json&nojsoncallback=1`,
       );
 
       if (!response.ok)
@@ -43,7 +47,7 @@ export class FlickrService implements IFlickrService {
         throw new FlickrErrorGetPhotos(data.message, data.code);
 
       return data;
-    } catch (error) {
+    } catch {
       throw new FlickrErrorGetPhotos('Error fetching Flickr getPhotos', 0);
     }
   }
@@ -75,7 +79,7 @@ export class FlickrService implements IFlickrService {
         throw new FlickrErrorGetExif(data.message, data.code);
 
       return data;
-    } catch (error) {
+    } catch {
       throw new FlickrErrorGetExif('Error fetching Flickr getExif', 0);
     }
   }
@@ -87,49 +91,54 @@ export class FlickrService implements IFlickrService {
     const photos = await this.getPhotos(photosetId, userId);
 
     return await Promise.all(
-      photos.photoset.photo.map(async (photo) => {
-        const exif = await this.getExif(photo.id, photo.secret);
-        const {
-          datetaken,
-          geo_is_public,
-          height_o,
-          latitude,
-          longitude,
-          originalformat,
-          title,
-          url_o,
-          width_o,
-        } = photo;
+      photos.photoset.photo
+        .filter((photo) => photo.url_o || photo.url_l)
+        .map(async (photo) => {
+          const exif = await this.getExif(photo.id, photo.secret);
+          const {
+            datetaken,
+            geo_is_public,
+            height_o,
+            height_l,
+            latitude,
+            longitude,
+            originalformat,
+            title,
+            url_o,
+            url_l,
+            width_o,
+            width_l,
+          } = photo;
 
-        return {
-          title,
-          tags: photo.tags.split(' '),
-          date: datetaken,
-          url: url_o,
-          height: height_o,
-          width: width_o,
-          format: originalformat,
-          ...(geo_is_public === 1 ? { latitude, longitude } : {}),
-          camera: exif.photo.camera,
-          exif: exif.photo.exif
-            .filter(
-              (item) =>
-                item.tag === 'FocalLength' ||
-                item.tag === 'FNumber' ||
-                item.tag === 'ISO' ||
-                item.tag === 'ExposureProgram' ||
-                item.tag === 'WhiteBalance' ||
-                item.tag === 'GPSAltitude' ||
-                item.tag === 'FocalLengthIn35mmFormat' ||
-                item.tag === 'ExposureTime',
-            )
-            .map((item) => ({
-              ...item,
-              raw: item.raw._content,
-              ...(item.clean ? { clean: item.clean._content } : {}),
-            })) as GetAlbumPhoto['exif'],
-        };
-      }),
+          return {
+            title,
+            tags: photo.tags.split(' ').filter((tag) => tag !== ''),
+            date: datetaken,
+            url: url_o || url_l,
+            height: height_o || height_l,
+            width: width_o || width_l,
+            format: originalformat,
+            ...(geo_is_public === 1 ? { latitude, longitude } : {}),
+            camera: exif.photo.camera,
+            exif: exif.photo.exif
+              .filter(
+                (item) =>
+                  item.tag === 'FocalLength' ||
+                  item.tag === 'FNumber' ||
+                  item.tag === 'ISO' ||
+                  item.tag === 'ExposureProgram' ||
+                  item.tag === 'WhiteBalance' ||
+                  item.tag === 'GPSAltitude' ||
+                  item.tag === 'FocalLengthIn35mmFormat' ||
+                  item.tag === 'ExposureTime',
+              )
+              .map((item) => ({
+                ...item,
+                raw: item.raw._content,
+                ...(item.clean ? { clean: item.clean._content } : {}),
+              })) as GetAlbumPhoto['exif'],
+          };
+        }),
     );
   }
 }
