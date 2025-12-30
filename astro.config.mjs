@@ -5,7 +5,7 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   site: 'https://rodrigotome.es/',
-  output: 'hybrid',
+  output: 'static',
   integrations: [
     tailwind({
       applyBaseStyles: false,
