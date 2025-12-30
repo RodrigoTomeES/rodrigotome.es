@@ -11,13 +11,7 @@ const { class: className = '', as: Element = 'div', ...props } = Astro.props;
   <div class="btn-back"></div>
   <div class="btn-front"></div>
   <div class="wrapper">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="icon"
-      width="64"
-      height="64"
-      viewBox="0 0 496 512"
-    >
+    <svg class="icon" viewBox="0 0 496 512">
       <path
         d="M248 8C111.1 8 0 119.1 0 256s111.1 248 248 248 248-111.1 248-248S384.9 8 248 8zm100.7 364.9c-4.2 0-6.8-1.3-10.7-3.6-62.4-37.6-135-39.2-206.7-24.5-3.9 1-9 2.6-11.9 2.6-9.7 0-15.8-7.7-15.8-15.8 0-10.3 6.1-15.2 13.6-16.8 81.9-18.1 165.6-16.5 237 26.2 6.1 3.9 9.7 7.4 9.7 16.5s-7.1 15.4-15.2 15.4zm26.9-65.6c-5.2 0-8.7-2.3-12.3-4.2-62.5-37-155.7-51.9-238.6-29.4-4.8 1.3-7.4 2.6-11.9 2.6-10.7 0-19.4-8.7-19.4-19.4s5.2-17.8 15.5-20.7c27.8-7.8 56.2-13.6 97.8-13.6 64.9 0 127.6 16.1 177 45.5 8.1 4.8 11.3 11 11.3 19.7-.1 10.8-8.5 19.5-19.4 19.5zm31-76.2c-5.2 0-8.4-1.3-12.9-3.9-71.2-42.5-198.5-52.7-280.9-29.7-3.6 1-8.1 2.6-12.9 2.6-13.2 0-23.3-10.3-23.3-23.6 0-13.6 8.4-21.3 17.4-23.9 35.2-10.3 74.6-15.2 117.5-15.2 73 0 149.5 15.2 205.4 47.8 7.8 4.5 12.9 10.7 12.9 22.6 0 13.6-11 23.3-23.2 23.3z"
         fill="url(#gradient-full)"></path>
@@ -31,6 +25,88 @@ const { class: className = '', as: Element = 'div', ...props } = Astro.props;
     </svg>
   </div>
 </Element>
+
+<template>
+  <div class="z-10 w-full overflow-hidden rounded-3xl bg-black shadow-2xl">
+    {/* Album Artwork */}
+    <div class="relative aspect-square">
+      <img
+        id="spotify-album-art"
+        alt=""
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+      <div
+        class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-b from-transparent to-black"
+      >
+      </div>
+    </div>
+
+    {/* Song Info */}
+    <div class="p-6">
+      <div class="mb-4 flex items-start justify-between">
+        <div class="flex-1">
+          <h2
+            class="mb-1 text-2xl font-bold text-white"
+            id="spotify-song-title"
+          >
+          </h2>
+          <p class="text-base text-gray-400" id="spotify-artist-name"></p>
+        </div>
+        <a
+          id="spotify-song-link"
+          href="#"
+          class="group-heart relative ml-4 mt-1 flex items-center justify-center"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div
+            class="absolute left-1/2 top-1/2 rounded-full opacity-0 transition-opacity duration-300"
+            id="spotify-link-hover"
+          >
+          </div>
+
+          <svg
+            id="spotify-heart-icon"
+            class="heart-outline relative z-10 h-7 w-7 fill-white transition-colors"
+            viewBox="0 -960 960 960"
+          >
+            <path
+              d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"
+            ></path>
+          </svg>
+
+          <svg
+            id="spotify-heart-icon-filled"
+            class="heart-filled relative z-10 h-7 w-7 fill-[#ef4444] transition-colors"
+            viewBox="0 -960 960 960"
+          >
+            <path
+              d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"
+            ></path>
+          </svg>
+        </a>
+      </div>
+
+      {/* Progress Bar */}
+      <div class="mb-2">
+        <input
+          type="range"
+          id="spotify-progress"
+          min="0"
+          max="100"
+          value="0"
+          class="w-full"
+        />
+      </div>
+
+      {/* Time */}
+      <div class="flex justify-between text-xs text-gray-400">
+        <span id="spotify-current-time">00:00</span>
+        <span id="spotify-duration">00:00</span>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style>
   .block-container {
@@ -84,6 +160,8 @@ const { class: className = '', as: Element = 'div', ...props } = Astro.props;
     animation: heartbeat 2s infinite;
     transform-origin: center;
     margin: auto;
+    width: 50%;
+    height: 50%;
   }
 
   @keyframes heartbeat {
@@ -106,6 +184,99 @@ const { class: className = '', as: Element = 'div', ...props } = Astro.props;
       transform: scale(0.75);
     }
   }
+
+  /* Progress bar styles */
+  #spotify-progress {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: #374151;
+    outline: none;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s linear;
+  }
+
+  /* Progress fill using pseudo-element for Webkit */
+  #spotify-progress::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: var(--value);
+    background: #ef4444;
+    border-radius: 2px;
+    transition: width 0.3s linear;
+  }
+
+  /* Webkit thumb (Chrome, Safari, Edge) */
+  #spotify-progress::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0;
+    height: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  /* Firefox thumb */
+  #spotify-progress::-moz-range-thumb {
+    width: 0;
+    height: 0;
+    background: transparent;
+    cursor: pointer;
+    border: none;
+  }
+
+  /* Firefox track */
+  #spotify-progress::-moz-range-track {
+    background: transparent;
+    border: none;
+  }
+
+  #spotify-progress::-moz-range-progress {
+    background-color: #ef4444;
+    height: 4px;
+    border-radius: 2px;
+    transition: width 0.3s linear;
+  }
+
+  /* Spotify link styles */
+  #spotify-song-link {
+    text-decoration: none;
+  }
+
+  #spotify-link-hover {
+    width: 48px;
+    height: 48px;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  #spotify-song-link:hover #spotify-link-hover {
+    opacity: 1;
+  }
+
+  /* Heart icon paths */
+  #spotify-song-link #spotify-heart-icon {
+    display: block;
+  }
+
+  #spotify-song-link #spotify-heart-icon-filled {
+    display: none;
+  }
+
+  #spotify-song-link.visited-link #spotify-heart-icon {
+    display: none;
+  }
+
+  #spotify-song-link.visited-link #spotify-heart-icon-filled {
+    display: block;
+  }
 </style>
 
 <script>
@@ -115,31 +286,176 @@ const { class: className = '', as: Element = 'div', ...props } = Astro.props;
       const data = await response.json();
 
       if (data.isPlaying) {
-        const spotify = document.getElementById('spotify');
-        const img = document.createElement('img');
+        const spotifyElement = document.getElementById('spotify');
+        const template = document.querySelector(
+          'template',
+        ) as HTMLTemplateElement;
 
-        img.src = data.cover;
-        img.alt = data.album;
-        img.style.gridArea = 'stack';
-        img.style.width = '100%';
-        img.style.height = '100%';
-        img.style.objectFit = 'cover';
-        img.style.objectPosition = 'center';
-        img.style.zIndex = '1';
-        spotify?.appendChild(img);
+        if (template && spotifyElement) {
+          // Clone the template
+          const card = template.content.cloneNode(true) as DocumentFragment;
 
-        document
-          .getElementById('spotify')
-          ?.setAttribute('data-song', data.song);
-        document
-          .getElementById('spotify')
-          ?.setAttribute('data-artist', data.artist);
-        document
-          .getElementById('spotify')
-          ?.setAttribute('data-album', data.album);
-        document
-          .getElementById('spotify')
-          ?.setAttribute('data-cover', data.cover);
+          // Fill in the data
+          const albumArtImg = card.querySelector(
+            '#spotify-album-art',
+          ) as HTMLImageElement;
+          const songTitle = card.querySelector(
+            '#spotify-song-title',
+          ) as HTMLElement;
+          const artistName = card.querySelector(
+            '#spotify-artist-name',
+          ) as HTMLElement;
+          const songLink = card.querySelector(
+            '#spotify-song-link',
+          ) as HTMLAnchorElement;
+
+          if (albumArtImg) {
+            albumArtImg.src = data.cover;
+            albumArtImg.alt = data.album;
+          }
+          if (songTitle) {
+            songTitle.textContent = data.song;
+          }
+          if (artistName) {
+            artistName.textContent = data.artist;
+          }
+          if (songLink) {
+            songLink.href = data.songUrl;
+            // Add click handler to toggle heart filled state
+            songLink.addEventListener('click', () => {
+              songLink.classList.add('visited-link');
+            });
+          }
+
+          // Fill in progress and duration
+          const progressInput = card.querySelector(
+            '#spotify-progress',
+          ) as HTMLInputElement;
+          const currentTimeSpan = card.querySelector(
+            '#spotify-current-time',
+          ) as HTMLElement;
+          const durationSpan = card.querySelector(
+            '#spotify-duration',
+          ) as HTMLElement;
+
+          const formatTime = (ms: number) => {
+            const seconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+          };
+
+          if (progressInput && durationSpan && currentTimeSpan) {
+            progressInput.max = data.duration.toString();
+            progressInput.value = data.progress.toString();
+            durationSpan.textContent = formatTime(data.duration);
+            currentTimeSpan.textContent = formatTime(data.progress);
+
+            // Update CSS variable for progress bar styling
+            const updateProgressBar = (progress: number, max: number) => {
+              const percentage = (progress / max) * 100;
+              progressInput.style.setProperty('--value', `${percentage}%`);
+            };
+
+            updateProgressBar(data.progress, data.duration);
+
+            // Calculate progress locally based on elapsed time
+            const initialProgress = data.progress;
+            const loadTime = Date.now();
+            const duration = data.duration;
+            let animationFrameId: number;
+
+            const updateProgress = async () => {
+              const elapsedMs = Date.now() - loadTime;
+              let currentProgress = initialProgress + elapsedMs;
+
+              // Cap progress at duration
+              if (currentProgress > duration) {
+                currentProgress = duration;
+              }
+
+              progressInput.value = currentProgress.toString();
+              currentTimeSpan.textContent = formatTime(currentProgress);
+              updateProgressBar(currentProgress, duration);
+
+              // Check if song has ended
+              if (currentProgress >= duration) {
+                cancelAnimationFrame(animationFrameId);
+                // Reload the song data
+                try {
+                  const newResponse = await fetch(
+                    `${import.meta.env.BASE_URL}api/spotify`,
+                  );
+                  const newData = await newResponse.json();
+
+                  if (newData.isPlaying) {
+                    // Update card with new song data
+                    if (albumArtImg) {
+                      albumArtImg.src = newData.cover;
+                      albumArtImg.alt = newData.album;
+                    }
+                    if (songTitle) {
+                      songTitle.textContent = newData.song;
+                    }
+                    if (artistName) {
+                      artistName.textContent = newData.artist;
+                    }
+                    if (songLink) {
+                      songLink.href = newData.songUrl;
+                      // Reset visited state for new song
+                      songLink.classList.remove('visited-link');
+                    }
+
+                    // Reset progress
+                    progressInput.max = newData.duration.toString();
+                    progressInput.value = newData.progress.toString();
+                    durationSpan.textContent = formatTime(newData.duration);
+                    currentTimeSpan.textContent = formatTime(newData.progress);
+                    updateProgressBar(newData.progress, newData.duration);
+
+                    // Restart the progress update
+                    const newInitialProgress = newData.progress;
+                    const newLoadTime = Date.now();
+                    let newAnimationFrameId: number;
+
+                    const newUpdateProgress = async () => {
+                      const newElapsedMs = Date.now() - newLoadTime;
+                      let newCurrentProgress =
+                        newInitialProgress + newElapsedMs;
+
+                      // Cap progress at duration
+                      if (newCurrentProgress > newData.duration) {
+                        newCurrentProgress = newData.duration;
+                      }
+
+                      progressInput.value = newCurrentProgress.toString();
+                      currentTimeSpan.textContent =
+                        formatTime(newCurrentProgress);
+                      updateProgressBar(newCurrentProgress, newData.duration);
+
+                      if (newCurrentProgress >= newData.duration) {
+                        cancelAnimationFrame(newAnimationFrameId);
+                      } else {
+                        newAnimationFrameId =
+                          requestAnimationFrame(newUpdateProgress);
+                      }
+                    };
+
+                    newAnimationFrameId =
+                      requestAnimationFrame(newUpdateProgress);
+                  }
+                } catch {}
+              } else {
+                animationFrameId = requestAnimationFrame(updateProgress);
+              }
+            };
+
+            animationFrameId = requestAnimationFrame(updateProgress);
+          }
+
+          // Append the card to the spotify element
+          spotifyElement.appendChild(card);
+        }
       }
     } catch {}
   });

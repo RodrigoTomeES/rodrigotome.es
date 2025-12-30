@@ -9,9 +9,11 @@ export async function GET() {
     const transform = (data: SpotifyResponse) => ({
       artist: data.item.artists[0].name,
       song: data.item.name,
-      album: data.item.album.name,
       cover: data.item.album.images[0].url,
       isPlaying: data.is_playing,
+      songUrl: data.item.external_urls.spotify,
+      progress: data.progress_ms,
+      duration: data.item.duration_ms,
     });
 
     return new Response(
