@@ -4,24 +4,72 @@ import '@/styles/global.css';
 export type Props = {
   title: string;
   description: string;
+  ogImage?: string;
 };
 
-const { title, description } = Astro.props;
+const {
+  title,
+  description,
+  ogImage = 'https://rodrigotome.es/og/index.png',
+} = Astro.props;
+const canonicalUrl = `https://rodrigotome.es${Astro.url.pathname}`;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="color-scheme" content="light" />
+    <meta name="author" content="Rodrigo Tomé" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preconnect" href="https://api.github.com" />
+    <link rel="preconnect" href="https://live.staticflickr.com" />
+    <link rel="dns-prefetch" href="https://api.github.com" />
+    <link rel="dns-prefetch" href="https://live.staticflickr.com" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Structured Data -->
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org/',
+        '@type': 'Person',
+        name: 'Rodrigo Tomé',
+        url: 'https://rodrigotome.es',
+        jobTitle: 'Software Engineer',
+        description:
+          'Building things for the web. Interested in developer experience, open source, and making technology more accessible.',
+        sameAs: [
+          'https://github.com/RodrigoTomeES',
+          'https://linkedin.com/in/rodrigotomees',
+        ],
+      })}
+    />
   </head>
-  <body class="min-h-[100dvh] bg-slate-500">
+  <body class="min-h-[100dvh] bg-white">
     <slot />
   </body>
 </html>

@@ -1,8 +1,10 @@
 ---
 import { Image } from 'astro:assets';
 
+import Description from '@/atoms/Description.astro';
 import Flickr from '@/atoms/Flickr.astro';
 import GitHub from '@/atoms/GitHub.astro';
+import Links from '@/atoms/Links.astro';
 import Spotify from '@/atoms/Spotify.astro';
 
 import me from '@/assets/images/me.jpg';
@@ -17,85 +19,29 @@ export const og: OGImageOptions = {
 };
 ---
 
-<Layout title="Welcome to Astro." description="Hellow world">
-  <main
-    class="grid min-h-[100dvh] grid-cols-2 gap-4 p-4"
-    style="grid-template-areas: var(--layout);"
-  >
-    <div
-      class="height-auto rounded-large bg-content1 text-foreground shadow-medium transition-transform-background data-[focus-visible=true]:outline-focus relative box-border flex aspect-square flex-col overflow-hidden border border-[rgb(39,39,42)] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-offset-2 motion-reduce:transition-none"
-      style="grid-area: me;"
-    >
-      <div class="rounded-large relative shadow-none shadow-black/5">
-        <Image
-          src={me}
-          alt="Rodrigo Tomé"
-          class="h-full w-full select-none object-cover"
-          draggable="false"
-        />
-      </div>
+<Layout
+  title="Rodrigo Tomé — Software Engineer"
+  description="Personal website of Rodrigo Tomé, Software Engineer. Building things for the web."
+>
+  <main class="mx-auto max-w-[700px] px-6 py-16 md:py-24">
+    <section class="mb-12">
+      <Image
+        src={me}
+        alt="Rodrigo Tomé"
+        class="mb-6 h-24 w-24 rounded-full object-cover"
+        loading="eager"
+        widths={[96, 192]}
+        sizes="96px"
+      />
+      <Description />
+      <Links class="mt-6" />
+    </section>
 
-      <p
-        class="color-inherit rounded-large border-1 bg-background/10 text-tiny shadow-small absolute bottom-1 z-10 ml-1 flex h-auto w-[calc(100%_-_8px)] items-center overflow-hidden border-white/20 p-3 py-1 text-white/80 subpixel-antialiased backdrop-blur backdrop-saturate-150 before:rounded-xl before:bg-white/10"
-      >
-        Available soon.
-      </p>
-    </div>
-    <div style="grid-area: social-media;" class="grid grid-cols-2 bg-green-500">
-      <div class="bg-green-600">1</div>
-      <div class="bg-red-600">2</div>
-      <div class="bg-orange-600">3</div>
-      <div class="bg-purple-600">4</div>
-    </div>
-    <div style="grid-area: quote;" class="bg-blue-500">3</div>
-    <GitHub style="grid-area: github;" class="bg-purple-500" />
-    <div style="grid-area: flicker;" class="bg-yellow-500"><Flickr /></div>
-    <Spotify style="grid-area: spotify;" />
+    <hr class="border-cv-border" />
+    <Spotify class="my-12" />
+    <hr class="border-cv-border" />
+    <GitHub class="my-12" />
+    <hr class="border-cv-border" />
+    <Flickr class="my-12" />
   </main>
 </Layout>
-
-<style>
-  :root {
-    --layout: var(--layout-normal);
-    --layout-normal: 'me social-media' 'quote quote' 'github flicker'
-      'spotify flicker';
-    --layout-random-1: 'quote quote' 'me social-media' 'flicker github'
-      'flicker spotify';
-    --layout-random-2: 'spotify me' 'quote quote' 'flicker github'
-      'flicker social-media';
-    --layout-random-3: 'quote me' 'quote social-media' 'spotify github'
-      'flicker flicker';
-    --layout-random-4: 'quote flicker' 'quote flicker' 'spotify me'
-      'github social-media';
-  }
-</style>
-
-<script>
-  const layouts = {
-    0: '--layout-normal',
-    1: '--layout-random-1',
-    2: '--layout-random-2',
-    3: '--layout-random-3',
-    4: '--layout-random-4',
-  };
-  const random = (min: number, max: number) =>
-    Math.floor(Math.random() * (max - min + 1) + min);
-
-  window.addEventListener('load', async () => {
-    const { Shake } = await import('@/utils/shake');
-    const shake = new Shake({ threshold: 15, timeout: 100 });
-
-    shake.addEventListener('shake', () => {
-      document.documentElement.style.setProperty(
-        '--layout',
-        `var(${
-          layouts[
-            random(0, Object.keys(layouts).length) as keyof typeof layouts
-          ]
-        })`,
-      );
-    });
-
-    shake.start();
-  });
-</script>
