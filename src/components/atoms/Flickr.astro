@@ -22,6 +22,24 @@ try {
 
 const displayPhotos = photos.slice(0, 6);
 const { class: className } = Astro.props;
+
+function getPhotoMeta(photo: GetAlbumPhoto) {
+  const exifMap = Object.fromEntries(
+    photo.exif.map((e) => [e.tag, e.clean ?? e.raw]),
+  );
+  return JSON.stringify({
+    url: photo.url,
+    title: photo.title,
+    date: photo.date,
+    camera: photo.camera,
+    width: photo.width,
+    height: photo.height,
+    fNumber: exifMap['FNumber'],
+    focalLength: exifMap['FocalLength'],
+    iso: exifMap['ISO'],
+    exposureTime: exifMap['ExposureTime'],
+  });
+}
 ---
 
 <section class:list={[className]} id="flickr" aria-label="Photography">
@@ -34,7 +52,13 @@ const { class: className } = Astro.props;
     displayPhotos.length > 0 ? (
       <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {displayPhotos.map((photo) => (
-          <figure class="group relative overflow-hidden rounded-lg">
+          <figure
+            class="group relative cursor-pointer overflow-hidden rounded-lg"
+            data-photo={getPhotoMeta(photo)}
+            role="button"
+            tabindex="0"
+            aria-label={`View ${photo.title}`}
+          >
             <Image
               src={photo.url}
               alt={photo.title}
@@ -54,4 +78,103 @@ const { class: className } = Astro.props;
       <p class="text-sm text-cv-muted">Photos unavailable</p>
     )
   }
+
+  <dialog
+    id="photo-modal"
+    class="m-auto max-h-[90vh] max-w-[90vw] rounded-xl bg-white p-0 shadow-2xl backdrop:bg-black/80"
+  >
+    <div class="relative">
+      <button
+        id="photo-modal-close"
+        class="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white transition-colors hover:bg-black/70"
+        aria-label="Close"
+      >
+        <svg
+          class="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      <img
+        id="photo-modal-img"
+        class="block max-h-[70vh] w-full rounded-t-xl object-contain"
+        src=""
+        alt=""
+      />
+      <div class="space-y-1 p-4">
+        <h3 id="photo-modal-title" class="font-semibold text-neutral-900"></h3>
+        <div
+          class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-cv-muted"
+        >
+          <span id="photo-modal-date"></span>
+          <span id="photo-modal-camera"></span>
+        </div>
+        <p id="photo-modal-exif" class="text-xs tracking-wide text-neutral-500">
+        </p>
+      </div>
+    </div>
+  </dialog>
 </section>
+
+<script>
+  const dialog = document.getElementById(
+    'photo-modal',
+  ) as HTMLDialogElement | null;
+  const img = document.getElementById(
+    'photo-modal-img',
+  ) as HTMLImageElement | null;
+  const titleEl = document.getElementById('photo-modal-title');
+  const dateEl = document.getElementById('photo-modal-date');
+  const cameraEl = document.getElementById('photo-modal-camera');
+  const exifEl = document.getElementById('photo-modal-exif');
+  const closeBtn = document.getElementById('photo-modal-close');
+
+  if (dialog && img && titleEl && dateEl && cameraEl && exifEl && closeBtn) {
+    for (const el of document.querySelectorAll<HTMLElement>('[data-photo]')) {
+      const open = () => {
+        const data = JSON.parse(el.dataset.photo!);
+        img.src = data.url;
+        img.alt = data.title;
+        titleEl.textContent = data.title;
+        dateEl.textContent = data.date
+          ? new Date(data.date).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          : '';
+        cameraEl.textContent = data.camera ?? '';
+
+        const parts: string[] = [];
+        if (data.fNumber) parts.push(`ƒ/${data.fNumber}`);
+        if (data.focalLength) parts.push(data.focalLength);
+        if (data.iso) parts.push(`ISO ${data.iso}`);
+        if (data.exposureTime) parts.push(`${data.exposureTime}s`);
+        exifEl.textContent = parts.join(' · ');
+
+        dialog.showModal();
+      };
+
+      el.addEventListener('click', open);
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          open();
+        }
+      });
+    }
+
+    closeBtn.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+  }
+</script>
