@@ -6,9 +6,9 @@ interface Props {
   class?: string;
 }
 
-const GITHUB_ENDPOINT = `https://api.github.com/search/repositories?q=org:${
+const GITHUB_ENDPOINT = `https://api.github.com/search/repositories?q=user:${
   import.meta.env.GITHUB_USERNAME
-}&sort=stars&order=desc`;
+}+fork:true&sort=stars&order=desc`;
 
 let repos: Item[] = [];
 
