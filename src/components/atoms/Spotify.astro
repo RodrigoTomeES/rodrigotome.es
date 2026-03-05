@@ -12,11 +12,13 @@ const { class: className } = Astro.props;
   aria-label="Currently listening on Spotify"
 >
   <h2
-    class="mb-4 text-xs font-semibold uppercase tracking-widest text-neutral-400"
+    class="mb-4 text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500"
   >
     Now Listening
   </h2>
-  <div class="flex items-center gap-3 text-sm text-cv-muted">
+  <div
+    class="flex items-center gap-3 text-sm text-cv-muted dark:text-neutral-400"
+  >
     <svg
       class="h-5 w-5 flex-shrink-0 fill-brand-green"
       viewBox="0 0 496 512"
@@ -43,11 +45,15 @@ const { class: className } = Astro.props;
         href="#"
         target="_blank"
         rel="noopener noreferrer"
-        class="block truncate text-sm font-semibold text-neutral-900 transition-colors hover:text-brand-green"
+        class="block truncate text-sm font-semibold text-neutral-900 transition-colors hover:text-brand-green dark:text-neutral-100"
       >
         <span id="spotify-song-title"></span>
       </a>
-      <p id="spotify-artist-name" class="truncate text-xs text-cv-muted"></p>
+      <p
+        id="spotify-artist-name"
+        class="truncate text-xs text-cv-muted dark:text-neutral-400"
+      >
+      </p>
       <div class="mt-1.5 flex items-center gap-2">
         <div
           id="spotify-progress-wrapper"
@@ -60,8 +66,9 @@ const { class: className } = Astro.props;
         >
           <div id="spotify-progress-fill" class="spotify-progress-fill"></div>
         </div>
-        <span id="spotify-current-time" class="text-[10px] text-neutral-400"
-          >00:00</span
+        <span
+          id="spotify-current-time"
+          class="text-[10px] text-neutral-400 dark:text-neutral-500">00:00</span
         >
       </div>
     </div>
@@ -69,6 +76,10 @@ const { class: className } = Astro.props;
 </template>
 
 <style>
+  :global(.dark) .spotify-progress-track {
+    background: #404040;
+  }
+
   .spotify-progress-track {
     width: 100%;
     height: 3px;

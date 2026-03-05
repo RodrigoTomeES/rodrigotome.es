@@ -6,6 +6,7 @@ import Flickr from '@/atoms/Flickr.astro';
 import GitHub from '@/atoms/GitHub.astro';
 import Links from '@/atoms/Links.astro';
 import Spotify from '@/atoms/Spotify.astro';
+import ThemeToggle from '@/atoms/ThemeToggle.astro';
 
 import me from '@/assets/images/me.jpg';
 import Layout from '../layouts/Layout.astro';
@@ -24,6 +25,9 @@ export const og: OGImageOptions = {
   description="Passionate about building scalable interfaces and great developer experience. I lead the Fusion project working with React, Next.js, TypeScript, and Tailwind. Outside of code, I love traveling, photography, pop and 80s music, electronic beats, and trying new things."
 >
   <main class="mx-auto max-w-[700px] px-6 py-16 md:py-24">
+    <div class="flex justify-end">
+      <ThemeToggle />
+    </div>
     <section class="mb-12">
       <Image
         src={me}
@@ -37,11 +41,11 @@ export const og: OGImageOptions = {
       <Links class="mt-6" />
     </section>
 
-    <hr class="border-cv-border" />
+    <hr class="border-cv-border dark:border-neutral-800" />
     <Spotify class="my-12" />
-    <hr class="border-cv-border" />
+    <hr class="border-cv-border dark:border-neutral-800" />
     <GitHub class="my-12" />
-    <hr class="border-cv-border" />
+    <hr class="border-cv-border dark:border-neutral-800" />
     <Flickr class="my-12" />
   </main>
 </Layout>

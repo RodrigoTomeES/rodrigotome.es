@@ -44,7 +44,7 @@ function getPhotoMeta(photo: GetAlbumPhoto) {
 
 <section class:list={[className]} id="flickr" aria-label="Photography">
   <h2
-    class="mb-6 text-xs font-semibold uppercase tracking-widest text-neutral-400"
+    class="mb-6 text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500"
   >
     Photography
   </h2>
@@ -81,7 +81,7 @@ function getPhotoMeta(photo: GetAlbumPhoto) {
 
   <dialog
     id="photo-modal"
-    class="m-auto max-h-[90vh] max-w-[90vw] rounded-xl bg-white p-0 shadow-2xl backdrop:bg-black/80"
+    class="m-auto max-h-[90vh] max-w-[90vw] rounded-xl bg-white p-0 shadow-2xl backdrop:bg-black/80 dark:bg-neutral-900"
   >
     <div class="relative">
       <button
@@ -110,14 +110,21 @@ function getPhotoMeta(photo: GetAlbumPhoto) {
         alt=""
       />
       <div class="space-y-1 p-4">
-        <h3 id="photo-modal-title" class="font-semibold text-neutral-900"></h3>
+        <h3
+          id="photo-modal-title"
+          class="font-semibold text-neutral-900 dark:text-neutral-100"
+        >
+        </h3>
         <div
-          class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-cv-muted"
+          class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-cv-muted dark:text-neutral-400"
         >
           <span id="photo-modal-date"></span>
           <span id="photo-modal-camera"></span>
         </div>
-        <p id="photo-modal-exif" class="text-xs tracking-wide text-neutral-500">
+        <p
+          id="photo-modal-exif"
+          class="text-xs tracking-wide text-neutral-500 dark:text-neutral-400"
+        >
         </p>
       </div>
     </div>

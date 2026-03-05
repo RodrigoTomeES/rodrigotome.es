@@ -21,7 +21,7 @@ const canonicalUrl = `https://rodrigotome.es${Astro.url.pathname}`;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#ffffff" />
-    <meta name="color-scheme" content="light" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="author" content="Rodrigo Tomé" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalUrl} />
@@ -68,8 +68,24 @@ const canonicalUrl = `https://rodrigotome.es${Astro.url.pathname}`;
         ],
       })}
     />
+    <script is:inline>
+      (function () {
+        var theme = localStorage.getItem('theme');
+        if (
+          theme === 'dark' ||
+          (!theme &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+          (theme === 'system' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
   </head>
-  <body class="min-h-[100dvh] bg-white">
+  <body class="min-h-[100dvh] bg-white dark:bg-neutral-950">
     <slot />
   </body>
 </html>

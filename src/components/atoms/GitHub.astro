@@ -28,7 +28,7 @@ const { class: className } = Astro.props;
 
 <section class:list={[className]} id="github" aria-label="Open source projects">
   <h2
-    class="mb-6 text-xs font-semibold uppercase tracking-widest text-neutral-400"
+    class="mb-6 text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500"
   >
     Open Source Projects
   </h2>
@@ -44,10 +44,10 @@ const { class: className } = Astro.props;
               class="group block"
             >
               <div class="flex items-center">
-                <span class="font-semibold text-neutral-900 transition-colors group-hover:text-brand-green">
+                <span class="font-semibold text-neutral-900 transition-colors group-hover:text-brand-green dark:text-neutral-100">
                   {repo.name}
                 </span>
-                <span class="ml-2 inline-flex items-center gap-1 text-xs text-cv-muted">
+                <span class="ml-2 inline-flex items-center gap-1 text-xs text-cv-muted dark:text-neutral-400">
                   <svg
                     class="h-3 w-3 fill-current text-brand-green"
                     viewBox="0 0 16 16"
@@ -59,14 +59,14 @@ const { class: className } = Astro.props;
                 </span>
               </div>
               {repo.description && (
-                <p class="mt-1 line-clamp-2 text-sm text-cv-muted">
+                <p class="mt-1 line-clamp-2 text-sm text-cv-muted dark:text-neutral-400">
                   {repo.description}
                 </p>
               )}
               {repo.topics.length > 0 && (
                 <div class="mt-2 flex flex-wrap gap-1.5">
                   {repo.topics.slice(0, 3).map((topic) => (
-                    <span class="rounded-full bg-cv-bg px-2.5 py-0.5 text-xs text-cv-muted">
+                    <span class="rounded-full bg-cv-bg px-2.5 py-0.5 text-xs text-cv-muted dark:bg-neutral-800 dark:text-neutral-400">
                       {topic}
                     </span>
                   ))}
@@ -77,12 +77,12 @@ const { class: className } = Astro.props;
         ))}
       </ul>
     ) : (
-      <p class="text-sm text-cv-muted">
+      <p class="text-sm text-cv-muted dark:text-neutral-400">
         <a
           href="https://github.com/RodrigoTomeES"
           target="_blank"
           rel="noopener noreferrer"
-          class="transition-colors hover:text-neutral-900"
+          class="transition-colors hover:text-neutral-900 dark:hover:text-neutral-100"
         >
           View on GitHub
         </a>
