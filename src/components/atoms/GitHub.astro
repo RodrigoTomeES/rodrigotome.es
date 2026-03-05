@@ -1,36 +1,92 @@
 ---
-import type { GitHubAPIResponse, TypeAs, TypeClass } from '@/types';
-import type { HTMLTag, Polymorphic } from 'astro/types';
+import type { GitHubAPIResponse } from '@/types';
+import type { Item } from '@/types/github';
 
-export type Props<T extends HTMLTag> = Polymorphic<TypeAs<T>> & TypeClass;
+interface Props {
+  class?: string;
+}
 
 const GITHUB_ENDPOINT = `https://api.github.com/search/repositories?q=org:${
   import.meta.env.GITHUB_USERNAME
 }&sort=stars&order=desc`;
 
-const fetchReposWithMoreStars = async () => {
+let repos: Item[] = [];
+
+try {
   const response = await fetch(GITHUB_ENDPOINT);
-  const data: GitHubAPIResponse = await response.json();
 
-  return data.items;
-};
+  if (response.ok) {
+    const data: GitHubAPIResponse = await response.json();
+    repos = (data.items || []).slice(0, 5);
+  }
+} catch {
+  /* GitHub API unavailable */
+}
 
-const repos = (await fetchReposWithMoreStars()).slice(0, 5);
-
-const { as: Element = 'div', ...props } = Astro.props;
+const { class: className } = Astro.props;
 ---
 
-<Element {...props} id="github">
-  <ul>
-    {
-      repos.map((repo) => (
-        <li>
-          <a href={repo.html_url}>
-            {repo.name}: {repo.stargazers_count}, topics:{' '}
-            {repo.topics.slice(0, 3).join(', ')}
-          </a>
-        </li>
-      ))
-    }
-  </ul>
-</Element>
+<section class:list={[className]} id="github" aria-label="Open source projects">
+  <h2
+    class="mb-6 text-xs font-semibold uppercase tracking-widest text-neutral-400"
+  >
+    Open Source
+  </h2>
+  {
+    repos.length > 0 ? (
+      <ul class="flex flex-col gap-4">
+        {repos.map((repo) => (
+          <li>
+            <a
+              href={repo.html_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group block"
+            >
+              <div class="flex items-center">
+                <span class="font-semibold text-neutral-900 transition-colors group-hover:text-brand-green">
+                  {repo.name}
+                </span>
+                <span class="ml-2 inline-flex items-center gap-1 text-xs text-cv-muted">
+                  <svg
+                    class="h-3 w-3 fill-current text-brand-green"
+                    viewBox="0 0 16 16"
+                    aria-hidden="true"
+                  >
+                    <path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z" />
+                  </svg>
+                  {repo.stargazers_count}
+                </span>
+              </div>
+              {repo.description && (
+                <p class="mt-1 line-clamp-2 text-sm text-cv-muted">
+                  {repo.description}
+                </p>
+              )}
+              {repo.topics.length > 0 && (
+                <div class="mt-2 flex flex-wrap gap-1.5">
+                  {repo.topics.slice(0, 3).map((topic) => (
+                    <span class="rounded-full bg-cv-bg px-2.5 py-0.5 text-xs text-cv-muted">
+                      {topic}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="text-sm text-cv-muted">
+        <a
+          href="https://github.com/RodrigoTomeES"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="transition-colors hover:text-neutral-900"
+        >
+          View on GitHub
+        </a>
+      </p>
+    )
+  }
+</section>
