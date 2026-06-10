@@ -15,8 +15,24 @@ import type { OGImageOptions } from 'astro-og-canvas';
 
 export const og: OGImageOptions = {
   title: 'Rodrigo Tomé',
-  description: 'Rodrigo Tomé personal website.',
-  logo: { path: './src/assets/images/me.jpg', size: [350] },
+  description: 'Front End Lead at GUT',
+  logo: { path: './src/assets/images/me-og.png', size: [220] },
+  bgGradient: [[255, 255, 255]], // bg-white
+  border: { color: [0, 188, 47], width: 16, side: 'block-end' }, // brand-green
+  padding: 80,
+  font: {
+    title: {
+      color: [23, 23, 23],
+      size: 78,
+      weight: 'Bold',
+      families: ['Inter'],
+    }, // neutral-900
+    description: { color: [102, 102, 102], size: 38, families: ['Inter'] }, // cv-muted
+  },
+  fonts: [
+    'https://api.fontsource.org/v1/fonts/inter/latin-400-normal.ttf',
+    'https://api.fontsource.org/v1/fonts/inter/latin-700-normal.ttf',
+  ],
 };
 ---
 
