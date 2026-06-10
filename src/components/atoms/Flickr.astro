@@ -22,6 +22,7 @@ try {
 
 const displayPhotos = photos.slice(0, 6);
 const { class: className } = Astro.props;
+const flickrProfileUrl = `https://www.flickr.com/photos/${import.meta.env.FLICKR_USER_ID}/`;
 
 function getPhotoMeta(photo: GetAlbumPhoto) {
   const exifMap = Object.fromEntries(
@@ -46,7 +47,14 @@ function getPhotoMeta(photo: GetAlbumPhoto) {
   <h2
     class="mb-6 text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500"
   >
-    Photography
+    <a
+      href={flickrProfileUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="transition-colors hover:text-brand-green"
+    >
+      Photography ↗
+    </a>
   </h2>
   {
     displayPhotos.length > 0 ? (
