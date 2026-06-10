@@ -62,6 +62,6 @@
     "node": ">=24"
   },
   "dependencies": {
-    "astro-og-canvas": "0.7.2"
+    "astro-og-canvas": "0.11.1"
   }
 }

@@ -18,4 +18,11 @@ export default defineConfig({
   image: {
     domains: ['live.staticflickr.com'],
   },
+  vite: {
+    ssr: {
+      // canvaskit-wasm relies on __dirname, which breaks when bundled as ESM
+      // in the Cloudflare worker used for prerendering OG images
+      external: ['canvaskit-wasm'],
+    },
+  },
 });
