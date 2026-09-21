@@ -10,9 +10,9 @@ export type Props = {
 const {
   title,
   description,
-  ogImage = 'https://rodrigotome.es/og/index.png',
+  ogImage = new URL('/og/index.png', Astro.site).href,
 } = Astro.props;
-const canonicalUrl = `https://rodrigotome.es${Astro.url.pathname}`;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!doctype html>
@@ -58,7 +58,7 @@ const canonicalUrl = `https://rodrigotome.es${Astro.url.pathname}`;
         '@context': 'https://schema.org/',
         '@type': 'Person',
         name: 'Rodrigo Tomé',
-        url: 'https://rodrigotome.es',
+        url: Astro.site?.origin,
         jobTitle: 'Front End Lead at GUT',
         description:
           'Passionate about building scalable interfaces and great developer experience. I lead the Fusion project working with React, Next.js, TypeScript, and Tailwind. Outside of code, I love traveling, photography, pop and 80s music, electronic beats, and trying new things.',

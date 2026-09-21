@@ -1,5 +1,6 @@
 import { cloudflareService, spotifyService, telegramService } from '@/services';
 import { verifyState } from '@/utils/oauthState';
+import { SITE_HOST } from '@/utils/site';
 
 import type { APIRoute } from 'astro';
 
@@ -55,14 +56,14 @@ export const GET: APIRoute = async ({ url }) => {
     );
     await cloudflareService.triggerDeploy();
     await telegramService.sendMessage(
-      '✅ rodrigotome.es: token de Spotify renovado, redeploy en curso.',
+      `✅ ${SITE_HOST}: token de Spotify renovado, redeploy en curso.`,
     );
 
     return html('Token updated. A new deployment is in progress.', 200);
   } catch (error) {
     const reason = error instanceof Error ? error.message : 'Unknown error';
     await telegramService.sendMessage(
-      `❌ rodrigotome.es: no se pudo renovar el token de Spotify. ${reason}`,
+      `❌ ${SITE_HOST}: no se pudo renovar el token de Spotify. ${reason}`,
     );
     return html('Could not renew the token.', 500);
   }

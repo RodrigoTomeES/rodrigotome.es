@@ -5,12 +5,14 @@ import {
   telegramService,
 } from '@/services';
 import { createState } from '@/utils/oauthState';
+import { SITE_HOST } from '@/utils/site';
 
 import type { SpotifyResponse } from '@/services';
 
 export const prerender = false;
 
-const ALERT_CACHE_KEY = 'https://rodrigotome.es/__alerts/spotify-auth';
+const ALERT_CACHE_KEY = new URL('/__alerts/spotify-auth', import.meta.env.SITE)
+  .href;
 const ALERT_TTL_SECONDS = 60 * 60 * 24;
 
 /**
@@ -30,7 +32,7 @@ async function notifyTokenExpired(reason: string) {
   const state = await createState(spotifyService.getClientSecret());
   const sent = await telegramService.sendMessage(
     [
-      '⚠️ rodrigotome.es: el token de Spotify ha caducado.',
+      `⚠️ ${SITE_HOST}: el token de Spotify ha caducado.`,
       `Motivo: ${reason}`,
       '',
       'Inicia sesión para renovarlo (el enlace caduca en 24 h):',
