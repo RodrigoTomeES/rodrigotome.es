@@ -40,7 +40,7 @@ Package manager is **bun** (lockfile: `bun.lock`). Node >= 24 required.
 
 ## Environment Variables
 
-Copy `.env.template` to `.env`. Required vars: `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, `SPOTIFY_REDIRECT_URL`, `SPOTIFY_REFRESH_TOKEN`, `GITHUB_USERNAME`, `FLICKR_API_KEY`, `FLICKR_PHOTOSET_ID`, `FLICKR_USER_ID`. Optional: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` (Telegram alert when the Spotify refresh token expires)
+Copy `.env.template` to `.env`. Required vars: `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, `SPOTIFY_REDIRECT_URL`, `SPOTIFY_REFRESH_TOKEN`, `GITHUB_USERNAME`, `FLICKR_API_KEY`, `FLICKR_PHOTOSET_ID`, `FLICKR_USER_ID`. Optional: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` (Telegram alert when the Spotify refresh token expires), `SPOTIFY_ALLOWED_USER_ID`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_PAGES_PROJECT`, `CLOUDFLARE_DEPLOY_HOOK_URL` (automatic Spotify token renewal through `/api/spotify/callback`)
 
 ## Git Config (this repo only)
 

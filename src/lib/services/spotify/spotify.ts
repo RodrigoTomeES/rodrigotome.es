@@ -14,6 +14,9 @@ export interface ISpotifyService {
     code: string,
   ) => Promise<SuccessfulGrantResponse>;
   getCurrentlyPlayingSong: () => Promise<SpotifyResponse>;
+  getAuthorizeUrl: (state?: string) => string;
+  getClientSecret: () => string;
+  getProfileId: (accessToken: AccessToken) => Promise<string>;
 }
 
 export class SpotifyErrorNoPlaying extends Error {
@@ -66,17 +69,27 @@ export class SpotifyService implements ISpotifyService {
       redirect_uri: this.redirectUrl,
     });
 
-    const response: { access_token: string; refresh_token: string } = await (
-      await fetch(
-        `https://accounts.spotify.com/api/token?${params.toString()}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
+    const res = await fetch(
+      `https://accounts.spotify.com/api/token?${params.toString()}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
-      )
-    ).json();
+      },
+    );
+    const response: {
+      access_token?: string;
+      refresh_token?: string;
+      error?: string;
+      error_description?: string;
+    } = await res.json();
+
+    if (!res.ok || !response.access_token || !response.refresh_token) {
+      throw new SpotifyErrorAuth(
+        `${response.error ?? res.status}: ${response.error_description ?? 'Could not exchange the authorization code'}`,
+      );
+    }
 
     this.setCurrentAccessToken(response.access_token);
     this.setRefreshToken(response.refresh_token);
@@ -85,6 +98,37 @@ export class SpotifyService implements ISpotifyService {
       accessToken: this.currentAccessToken,
       refreshToken: this.refreshToken,
     };
+  }
+
+  public getAuthorizeUrl(state?: string): string {
+    const params = new URLSearchParams({
+      client_id: this.clientId,
+      response_type: 'code',
+      redirect_uri: this.redirectUrl,
+      scope: 'user-read-private user-read-currently-playing',
+    });
+    if (state) params.set('state', state);
+
+    return `https://accounts.spotify.com/authorize?${params.toString()}`;
+  }
+
+  public getClientSecret(): string {
+    return this.clientSecret;
+  }
+
+  public async getProfileId(accessToken: AccessToken): Promise<string> {
+    const response = await fetch('https://api.spotify.com/v1/me', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    if (!response.ok) {
+      throw new SpotifyErrorAuth(
+        `Could not read the Spotify profile (${response.status})`,
+      );
+    }
+
+    const profile: { id: string } = await response.json();
+    return profile.id;
   }
 
   public async getNewAccessTokenFromRefreshToken(): Promise<void> {

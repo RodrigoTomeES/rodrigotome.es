@@ -4,6 +4,7 @@ import {
   spotifyService,
   telegramService,
 } from '@/services';
+import { createState } from '@/utils/oauthState';
 
 import type { SpotifyResponse } from '@/services';
 
@@ -26,12 +27,14 @@ async function notifyTokenExpired(reason: string) {
 
   if (cache && (await cache.match(ALERT_CACHE_KEY))) return;
 
+  const state = await createState(spotifyService.getClientSecret());
   const sent = await telegramService.sendMessage(
     [
       '⚠️ rodrigotome.es: el token de Spotify ha caducado.',
       `Motivo: ${reason}`,
       '',
-      'Solución: ejecuta `bun run get-refresh-token <code>`, actualiza SPOTIFY_REFRESH_TOKEN y vuelve a desplegar.',
+      'Inicia sesión para renovarlo (el enlace caduca en 24 h):',
+      spotifyService.getAuthorizeUrl(state),
     ].join('\n'),
   );
 
