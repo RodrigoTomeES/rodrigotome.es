@@ -10,7 +10,8 @@ https://accounts.spotify.com/authorize?client_id=PASTE_HERE&response_type=code&r
 
 1. Create a bot with [@BotFather](https://t.me/BotFather) and copy its token into `TELEGRAM_BOT_TOKEN`.
 2. Send any message to the bot, then open `https://api.telegram.org/bot<TOKEN>/getUpdates` and copy `message.chat.id` into `TELEGRAM_CHAT_ID`.
-3. When Spotify rejects the refresh token, `/api/spotify` sends one alert every 24h. Regenerate it with `bun run get-refresh-token <code>`, update `SPOTIFY_REFRESH_TOKEN` and redeploy.
+3. Alerts are only sent in production; they are disabled in development (`bun run dev`).
+4. When Spotify rejects the refresh token, `/api/spotify` sends one alert every 24h. Regenerate it with `bun run get-refresh-token <code>`, update `SPOTIFY_REFRESH_TOKEN` and redeploy.
 
 ## Licence
 

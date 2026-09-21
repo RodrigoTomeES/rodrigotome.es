@@ -17,6 +17,8 @@ const ALERT_TTL_SECONDS = 60 * 60 * 24;
  * so a dead token doesn't send one message per page visit.
  */
 async function notifyTokenExpired(reason: string) {
+  if (!telegramService.isConfigured()) return;
+
   const cache =
     typeof caches === 'undefined'
       ? undefined

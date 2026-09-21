@@ -2,7 +2,9 @@ export class TelegramService {
   private botToken: string = import.meta.env.TELEGRAM_BOT_TOKEN as string;
   private chatId: string = import.meta.env.TELEGRAM_CHAT_ID as string;
 
+  /** Alerts are disabled in development (`astro dev`). */
   public isConfigured(): boolean {
+    if (import.meta.env.DEV) return false;
     return !!this.botToken && !!this.chatId;
   }
 
