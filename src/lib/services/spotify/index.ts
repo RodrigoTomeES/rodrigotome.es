@@ -1,7 +1,11 @@
-import { SpotifyErrorNoPlaying, SpotifyService } from './spotify';
+import {
+  SpotifyErrorAuth,
+  SpotifyErrorNoPlaying,
+  SpotifyService,
+} from './spotify';
 
 const spotifyService = new SpotifyService();
 
 export default spotifyService;
-export { SpotifyErrorNoPlaying };
+export { SpotifyErrorAuth, SpotifyErrorNoPlaying };
 export type { SpotifyResponse } from './types';

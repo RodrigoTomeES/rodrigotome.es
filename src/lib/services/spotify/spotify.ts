@@ -23,6 +23,13 @@ export class SpotifyErrorNoPlaying extends Error {
   }
 }
 
+export class SpotifyErrorAuth extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'SpotifyErrorAuth';
+  }
+}
+
 export class SpotifyService implements ISpotifyService {
   /**
    * We're going to need a refresh token and we're going to need to
@@ -88,19 +95,34 @@ export class SpotifyService implements ISpotifyService {
       refresh_token: this.refreshToken,
     });
 
-    const response: { access_token: string } = await (
-      await fetch(
-        `https://accounts.spotify.com/api/token?${params.toString()}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
+    const res = await fetch(
+      `https://accounts.spotify.com/api/token?${params.toString()}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
-      )
-    ).json();
+      },
+    );
+    const response: {
+      access_token?: string;
+      refresh_token?: string;
+      error?: string;
+      error_description?: string;
+    } = await res.json();
+
+    if (!res.ok || !response.access_token) {
+      throw new SpotifyErrorAuth(
+        `${response.error ?? res.status}: ${response.error_description ?? 'Could not refresh Spotify access token'}`,
+      );
+    }
 
     this.setCurrentAccessToken(response.access_token);
+
+    // Spotify may rotate the refresh token; keep the newest one.
+    if (response.refresh_token) {
+      this.setRefreshToken(response.refresh_token);
+    }
   }
 
   private fetchCurrentlyPlayingSong(): Promise<Response> {
@@ -121,6 +143,12 @@ export class SpotifyService implements ISpotifyService {
     if (!response.ok) {
       await this.getNewAccessTokenFromRefreshToken();
       response = await this.fetchCurrentlyPlayingSong();
+
+      if (response.status === 401 || response.status === 403) {
+        throw new SpotifyErrorAuth(
+          `Spotify rejected the access token (${response.status})`,
+        );
+      }
     }
 
     if (response.status === 204) {
